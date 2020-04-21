@@ -1,0 +1,57 @@
+#!/bin/bash
+# This code was written by David Elmo Ross in July of 2015.
+
+# This code will take 5 pictures at a resolution you choose about
+# 1 second after the light comes on each time. The picture will have a unique
+# name, since the Date and Times are unique.
+# The default date delimiters (such as / : and space)
+#  are replaced by underscores so that the file names 
+# will be valid on any computer system.
+
+# This line of code generates a  DATE  value that is to be
+# used as a directory name under the BASE_DIRectory
+DATE=$(date +%D|sed 's/\//_/g')
+
+# This BASE_DIRectory is currently set to  /home/pi/security
+# Under the base directory will be created folders for each
+# day that you take pictures 
+BASE_DIR="/home/pi/security"
+PIC_DIR="$BASE_DIR/$DATE"
+
+if [ ! -d "$PIC_DIR" ];
+then mkdir -p "$PIC_DIR"
+fi
+
+for (( c=1; c<=5; c++ ))
+do
+
+# You can uncomment (remove the #) from whichever DATE=$ line format you
+# like as given in the examples - but ONLY 1 should be uncommented!!!
+# The default for this script is to use the FIRST    DATE=$   
+
+# DATE=$(date +%x%r |sed 's/\//_/g'|sed 's/ /_/g'|sed 's/:/_/g')
+#     Example1       18_07_1511_32_15_pm_EDT.jpg
+#     Example2       18_07_15_2_45_13_am_EDT.jpg
+#    Note for hours that are from 0-9 this script works well
+#    However, for hours 10-12 it will place the last digit of the year
+#    right next to the left digit of the time.
+#
+#    The following  script will eliminate this problem.
+# DATE=$(echo $(date +%x) $(date +%r)|sed 's/ /_/g'|sed 's/\//_/g'|sed 's/:/_/g')
+#     Example:        18_07_15_7_31_26_pm_EDT.jpg 
+#
+ DATE=$(echo $(date +%c) $(date +%r)| cut -d ' ' -f 5-6 --complement|sed 's/ /_/g'|sed 's/:/_/g')
+#     Example:        Sat_18_Jul_2015_7_33_21_pm_EDT.jpg
+
+# The following raspistill scripts will take pictures at various
+# resolutions. You can uncomment the one that you want to choose
+
+# The following line takes pictures at a 5 megapixel resolution
+# raspistill -t 1000 -o "$PIC_DIR/"$DATE"_hi".jpg
+
+# The following line takes pictures at a resolution of 640X480
+ raspistill -w 640 -h 480  -t 1000  -o "$PIC_DIR/"$DATE"_med".jpg
+
+# The following line takes pictures at a resolution of 320X240
+# raspistill -w 320 -h 240 -t 1000 -o "$PIC_DIR/"$DATE"_low".jpg
+done

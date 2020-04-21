@@ -1,0 +1,3 @@
+curl -X POST http://textbelt.com/text \
+ -d number=5551234567 \
+ -d "message=Motion was detected in your home."

@@ -1,0 +1,22 @@
+Steps for configuring Pi Cam Streaming
+
+1. sudo apt-get install python-pip
+2. pip install picamera
+3. sudo pip install flask
+4. git clone https://github.com/miguelgrinberg/flask-video-streaming.git
+5. Comment out this line by adding a “#” to the beginning:
+	#from camera import Camera
+6. Un-comment this line:
+	from camera_pi import Camera
+7. Save the file.
+8. ifconfig
+	inet addr:10.0.1.3 Bcast:10.0.1.255 Mask:255.255.255.0
+	The inet addr is your local IP address. In this case, 10.0.1.3.
+9. Start the Flask server by running this command:
+	python app.py
+10.You will see this, which means that the server is running on port 5000 and is ready:
+	Running on http://0.0.0.0:5000/
+	Restarting with reloader
+11.Open up a web browser on your favorite device and go to this address http://10.0.1.3:5000,
+	except replace that IP address with the one that your Raspberry Pi is running on.
+	You should see a live view the video that your Raspberry Pi is capturing.
